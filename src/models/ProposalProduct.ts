@@ -20,15 +20,10 @@ class ProposalProduct {
   quantity: number;
 
   @CreateDateColumn({ type: 'timestamptz', select: false })
-  paymentDate: Date;
-
-  @CreateDateColumn({ type: 'timestamptz', select: false })
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz', select: false })
   updatedAt: Date;
-
-  // Product Id
 
   // Proposal Id
   @ManyToOne(type => Proposal, proposal => proposal.id)
