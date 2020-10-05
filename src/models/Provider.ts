@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn, OneToMany
 } from "typeorm";
+
 import Product from "./Product";
+import ProductProvider from './ProductProvider';
 import Proposal from "./Proposal";
 
 @Entity("provider")
@@ -25,8 +27,8 @@ class Provider {
   @OneToMany(type => Proposal, proposal => proposal.provider)
   proposals: Proposal[];
 
-  @OneToMany(type => Product, product => product.provider)
-  products: Product[];
+  @OneToMany(type => ProductProvider, productProvider => productProvider.provider)
+  productProviders: ProductProvider[];
 
 }
 

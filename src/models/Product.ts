@@ -4,11 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
   ManyToOne
 } from "typeorm";
-import Provider from "./Provider";
 
-import Responsible from './Responsible';
+import Provider from "./Provider";
+import ProductProvider from "./ProductProvider";
 
 @Entity("product")
 class Product {
@@ -16,19 +17,21 @@ class Product {
   id: string;
 
   @Column()
-  type: string;
+  name: string;
 
   @Column()
-  closed: boolean;
-
+  unitMeasure: string;
+  
   @CreateDateColumn({ type: 'timestamptz', select: false })
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz', select: false })
   updatedAt: Date;
 
-  @ManyToOne(type => Provider, provider => provider.id)
-  provider: Provider;
+  @OneToMany(type => ProductProvider, productProvider => productProvider.provider)
+  productProviders: ProductProvider[];
+
+
 }
 
 export default Product;
