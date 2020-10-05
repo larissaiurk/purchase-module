@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import Proposal from "./Proposal";
 
+import Product from './Product';
 
 @Entity("proposal_product")
 class ProposalProduct {
@@ -28,6 +29,9 @@ class ProposalProduct {
   // Proposal Id
   @ManyToOne(type => Proposal, proposal => proposal.id)
   proposal: Proposal;
+
+  @ManyToOne(type => Product, product => product.productProposal)
+  product: Product;
 
 }
 

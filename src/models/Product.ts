@@ -10,6 +10,7 @@ import {
 
 import Provider from "./Provider";
 import ProductProvider from "./ProductProvider";
+import ProposalProduct from "./ProposalProduct";
 
 @Entity("product")
 class Product {
@@ -31,6 +32,8 @@ class Product {
   @OneToMany(type => ProductProvider, productProvider => productProvider.provider)
   productProviders: ProductProvider[];
 
+  @OneToMany(type => ProposalProduct, productProposal => productProposal.proposal)
+  productProposal: ProposalProduct[];
 
 }
 

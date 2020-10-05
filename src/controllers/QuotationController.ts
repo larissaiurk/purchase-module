@@ -97,8 +97,10 @@ class QuotationController {
             return item.provider.id === topProvider.provider.id;
           });
           productsForProposal.forEach(async (proposalProductItem:any) => {
+            
             const proposalProduct = new ProposalProduct();
             proposalProduct.proposal = proposal;
+            proposalProduct.product = proposalProductItem.product;
             proposalProduct.price = proposalProductItem.price;
             proposalProduct.quantity = produtctQtd;
             await entityManager.save(proposalProduct);
