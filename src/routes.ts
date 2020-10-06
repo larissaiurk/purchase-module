@@ -1,13 +1,14 @@
 import { Router } from "express";
 
-import CallStock from "./controllers/CallStock";
+import ReceiveProductsController from "./controllers/ReceiveProductsController";
 import QuotationController from './controllers/QuotationController';
 import ProposalController from './controllers/ProposalController';
 import OrderController from './controllers/OrderController';
 
 const router = Router();
 
-router.post("/", CallStock.create);
+router.post("/receive-products", ReceiveProductsController.create);
+router.post('/quotation/:idPurchaseRequest', QuotationController.create);
 
 router.get('/quotation/:idQuotation', QuotationController.index);
 router.post('/quotation', QuotationController.create);

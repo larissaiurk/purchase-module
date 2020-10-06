@@ -1,18 +1,26 @@
 import stockApi from "../config";
 
-interface ProductDepositMovement {
-  depositId: number
-  productId: number
-  price?: number
-  quantity: number
-}
-
 class StockService {
 
-  async buyProducts(data: ProductDepositMovement) {
-    stockApi.post('/product-movement', {
+
+  async getSUb(): Promise<any> {
+    return stockApi.get('/subsidiaries');
+  }
+
+  async createDocument(data: any): Promise<any> {
+    
+    return stockApi.post('/documents', data,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  }
+
+  async buyProducts(data: any): Promise<any> {
+    return stockApi.post('/product-movement', {
       type: 'BUY',
-      ...data
+      ...data,
     })
   }
 
