@@ -8,22 +8,27 @@ import Order from '../models/Order';
 import Responsible from '../models/Responsible';
 import Proposal from '../models/Proposal';
 import Provider from '../models/Provider';
+import ProposalProduct from '../models/ProposalProduct';
 
 import ReceiveProductsController from './ReceiveProductsController';
 
 
 class QuotationController {
+
   async index (request: Request, response: Response) {
-    const repository = getRepository(Quotation);
-    return response.json({message: 'oi'});
+    const { idQuotation } = request.params;
+
+    const quotation: any = await createQueryBuilder("Proposal")
+      .leftJoinAndSelect("Proposal.quotation", "quotation")
+      .where("Proposal.quotation.id = :quotationId", { quotationId: idQuotation })
+      .getMany();
+
+    return response.status(200).json(quotation);
   }
   
   async create (request: Request, response: Response) {
-    const { idPurchaseRequest } = request.params;
-    
-    console.log(request.body);
 
-    const { productIds, responsibleId } = request.body;
+    const { productIds, responsibleId, produtctQtd } = request.body;
 
     const topProviders: any = await createQueryBuilder("ProductProvider")
       .leftJoinAndSelect("ProductProvider.product", "product")
@@ -55,55 +60,55 @@ class QuotationController {
     await entityManager.save(order);
     await entityManager.save(quotation);
 
-    const formatted = groupBy(topProviders, 'provider');
+
+    let totalProposals = 1;
+    let providerAlreadySaved = false;
+    let providersSavedId: any[] = [];
     
-    // productIds.forEach((product: any) => {
-    //   const topProvidersByProduct = topProviders.filter((item: any) => item.product.id === product)
-    //   console.log('filter', topProvidersByProduct);
-    // });
-
-    let totalProposals = 0;
-
+    
     topProviders.forEach(async (topProvider: any) => {
       //totalizar no max 3 propostas
+      providerAlreadySaved = false;
+      if(totalProposals < 4){
+        const findProvider = providersSavedId.find((item: any) => {
+          return item === topProvider.provider.id;
+        })
+        
+        if(findProvider) {
+          providerAlreadySaved = true;
+        }
 
-      if(totalProposals <= 3){
-        const proposal = new Proposal();
-        proposal.quotation = quotation;
+        providersSavedId.push(topProvider.provider.id);
+        if(providerAlreadySaved){ 
+          //proposal
+          totalProposals= (totalProposals+1);
 
-        const providerItem = await entityManager.findOne(Provider, topProvider.provider.id);
-        if(providerItem)
-          proposal.provider = providerItem;
+          const proposal = new Proposal();
+          proposal.quotation = quotation;
+          const providerItem = await entityManager.findOne(Provider, topProvider.provider.id);
 
-        // let alredyExists = null;
-        // if(providerItem) {
-        //   const proposalRepository = getRepository(Proposal);
-        //   alredyExists = await proposalRepository.find({ where: { quotation: quotation, provider: providerItem } });
-        //   console.log('proposalRepository ja existe', alredyExists);
-        // }
+          if(providerItem)
+            proposal.provider = providerItem;
+          await entityManager.save(proposal);
 
-        totalProposals += 1;
+
+          //proposal products
+          const productsForProposal = topProviders.filter((item: any) => {
+            return item.provider.id === topProvider.provider.id;
+          });
+          productsForProposal.forEach(async (proposalProductItem:any) => {
+            
+            const proposalProduct = new ProposalProduct();
+            proposalProduct.proposal = proposal;
+            proposalProduct.product = proposalProductItem.product;
+            proposalProduct.price = proposalProductItem.price;
+            proposalProduct.quantity = produtctQtd;
+            await entityManager.save(proposalProduct);
+          });
+        }
       }
     })
-
-
-    // const entityManager = getManager(); // you can also get it via getConnection().manager
-    // const quotation = await entityManager.findOne(User, 1);
-    // quotation.orderId = "Umed";
-    // await entityManager.save(user);
-
-    // criar cotacao
-
-    // topProviders.forEach((provider: any) => {
-    //   const proposal = {
-    //     quotationId: 1,
-    //     providerId: provider.id,
-    //   }
-      
-    // });
-
-
-    return response.json(topProviders);
+    return response.status(200).json(`Solicitação gerou propostas com suceeso. ID cotação: ${quotation.id}`);
   }
 }
 

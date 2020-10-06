@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import Proposal from "./Proposal";
 
+import Product from './Product';
 
 @Entity("proposal_product")
 class ProposalProduct {
@@ -20,19 +21,17 @@ class ProposalProduct {
   quantity: number;
 
   @CreateDateColumn({ type: 'timestamptz', select: false })
-  paymentDate: Date;
-
-  @CreateDateColumn({ type: 'timestamptz', select: false })
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz', select: false })
   updatedAt: Date;
 
-  // Product Id
-
   // Proposal Id
   @ManyToOne(type => Proposal, proposal => proposal.id)
   proposal: Proposal;
+
+  @ManyToOne(type => Product, product => product.productProposal)
+  product: Product;
 
 }
 
