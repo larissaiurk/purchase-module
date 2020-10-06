@@ -19,7 +19,7 @@ class Order {
   @Column()
   type: string;
 
-  @Column()
+  @Column({default: false})
   closed: boolean;
 
   @CreateDateColumn({ type: 'timestamptz', select: false })
@@ -27,7 +27,6 @@ class Order {
 
   @UpdateDateColumn({ type: 'timestamptz', select: false })
   updatedAt: Date;
-
 
   @ManyToOne(type => Responsible, responsible => responsible.orders)
   responsible: Responsible;

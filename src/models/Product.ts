@@ -32,8 +32,8 @@ class Product {
   @OneToMany(type => ProductProvider, productProvider => productProvider.provider)
   productProviders: ProductProvider[];
 
-  @OneToMany(type => ProposalProduct, productProposal => productProposal.proposal)
-  productProposal: ProposalProduct[];
+  @OneToMany(type => ProposalProduct, proposalProduct => proposalProduct.proposal)
+  proposalProduct: ProposalProduct[];
 
 }
 

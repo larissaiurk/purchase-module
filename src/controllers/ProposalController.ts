@@ -16,7 +16,7 @@ class ProposalController {
     return response.status(200).json(proposals);
   }
 
-  async update (request: Request, response: Response) {
+  async updateDates (request: Request, response: Response) {
     const { idProposal } = request.params;
 
     const { payment_date, delivery_date } = request.body;

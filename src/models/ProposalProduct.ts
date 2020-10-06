@@ -27,10 +27,10 @@ class ProposalProduct {
   updatedAt: Date;
 
   // Proposal Id
-  @ManyToOne(type => Proposal, proposal => proposal.id)
+  @ManyToOne(type => Proposal, proposal => proposal.proposalProduct)
   proposal: Proposal;
 
-  @ManyToOne(type => Product, product => product.productProposal)
+  @ManyToOne(type => Product, product => product.proposalProduct)
   product: Product;
 
 }

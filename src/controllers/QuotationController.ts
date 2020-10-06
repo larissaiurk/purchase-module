@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository, createQueryBuilder, getManager } from 'typeorm';
+import { getConnection, createQueryBuilder, getManager } from 'typeorm';
 
 import groupBy from '../utils/groupBy';
 
@@ -9,6 +9,7 @@ import Responsible from '../models/Responsible';
 import Proposal from '../models/Proposal';
 import Provider from '../models/Provider';
 import ProposalProduct from '../models/ProposalProduct';
+import Product from '../models/Product';
 
 import ReceiveProductsController from './ReceiveProductsController';
 
@@ -19,11 +20,31 @@ class QuotationController {
     const { idQuotation } = request.params;
 
     const quotation: any = await createQueryBuilder("Proposal")
-      .leftJoinAndSelect("Proposal.quotation", "quotation")
+      .innerJoinAndSelect("Proposal.proposalProduct", "proposalProduct")
+      .innerJoinAndSelect("proposalProduct.product", "product")
+      .innerJoinAndSelect("Proposal.quotation", "quotation")
+      .innerJoinAndSelect("quotation.order", "order")
+      .innerJoinAndSelect("order.responsible", "responsible")
       .where("Proposal.quotation.id = :quotationId", { quotationId: idQuotation })
+      .orderBy("Proposal.id")
       .getMany();
+    let total = 0;
 
-    return response.status(200).json(quotation);
+    const mappedQuotation = quotation.map((item: any) => {
+      
+      const products = item.proposalProduct;
+    
+      const pp = products.forEach((prodItem: any) => {
+        total = total + (prodItem.price*prodItem.quantity);
+      })
+      return {
+        ...item,
+        total: total,
+      }
+
+    })
+
+    return response.status(200).json(mappedQuotation);
   }
   
   async create (request: Request, response: Response) {

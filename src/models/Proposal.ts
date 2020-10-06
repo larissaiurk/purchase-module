@@ -3,7 +3,8 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne, OneToMany
+  ManyToOne, OneToMany,
+  Column,
 } from "typeorm";
 import ProposalProduct from "./ProposalProduct";
 import Provider from "./Provider";
@@ -26,6 +27,9 @@ class Proposal {
   @UpdateDateColumn({ type: 'timestamptz', select: false })
   updatedAt: Date;
 
+  @Column({ default: false })
+  choosed: boolean;
+  
   @ManyToOne(type => Quotation, quotation => quotation.proposals)
   quotation: Quotation;
 
