@@ -6,9 +6,11 @@ import { router } from "./routes";
 import "reflect-metadata";
 
 import "./database";
+import { createConnection } from "typeorm";
+import config from './ormconfig'
 
 const app = express();
-
+createConnection(config);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

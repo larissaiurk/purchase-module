@@ -11,6 +11,7 @@ import {
 import Provider from "./Provider";
 import ProductProvider from "./ProductProvider";
 import ProposalProduct from "./ProposalProduct";
+import { name } from "../ormconfig";
 
 @Entity("product")
 class Product {
@@ -20,7 +21,7 @@ class Product {
   @Column()
   name: string;
 
-  @Column()
+  @Column({name: 'unit_measure'})
   unitMeasure: string;
   
   @CreateDateColumn({ type: 'timestamptz', select: false })

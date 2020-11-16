@@ -3,11 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn, OneToMany, ManyToOne
+  UpdateDateColumn, OneToMany, ManyToOne, JoinColumn
 } from "typeorm";
 
 import Product from "./Product";
 import Provider from "./Provider";
+
+
 
 @Entity("product_provider")
 class ProductProvider {
@@ -24,9 +26,11 @@ class ProductProvider {
   updatedAt: Date;
 
   @ManyToOne(type => Provider, provider => provider.productProviders)
+  @JoinColumn({name: 'provider_id'})
   provider: Provider;
 
   @ManyToOne(type => Product, product => product.productProviders)
+  @JoinColumn({name: 'product_id'})
   product: Product;
 
 }

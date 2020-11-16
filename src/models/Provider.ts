@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn, OneToMany
+  UpdateDateColumn, OneToMany, JoinColumn
 } from "typeorm";
 
 import Product from "./Product";
@@ -18,16 +18,17 @@ class Provider {
   @Column()
   name: string;
 
-  @CreateDateColumn({ type: 'timestamptz', select: false })
+  @CreateDateColumn({ type: 'timestamptz', select: false, name: 'created_at'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', select: false })
+  @UpdateDateColumn({ type: 'timestamptz', select: false,  name: 'updated_at' })
   updatedAt: Date;
 
   @OneToMany(type => Proposal, proposal => proposal.provider)
   proposals: Proposal[];
 
   @OneToMany(type => ProductProvider, productProvider => productProvider.provider)
+  
   productProviders: ProductProvider[];
 
 }

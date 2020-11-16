@@ -18,10 +18,10 @@ class OrderHistory {
   @Column()
   type: string;
 
-  @CreateDateColumn({ type: 'timestamptz', select: false })
+  @CreateDateColumn({ type: 'timestamptz', select: false, name: 'created_at'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', select: false })
+  @UpdateDateColumn({ type: 'timestamptz', select: false,  name: 'updated_at' })
   updatedAt: Date;
 
   // relacao order id

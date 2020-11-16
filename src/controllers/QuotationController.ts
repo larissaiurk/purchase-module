@@ -28,6 +28,8 @@ class QuotationController {
       .where("Proposal.quotation.id = :quotationId", { quotationId: idQuotation })
       .orderBy("Proposal.id")
       .getMany();
+
+      console.log('et', quotation, idQuotation)
     let total = 0;
 
     const mappedQuotation = quotation.map((item: any) => {
@@ -65,10 +67,12 @@ class QuotationController {
     order.type = 'Solicitação de Compra';
 
     const responsible = await entityManager.findOne(Responsible, responsibleId);
+    
     if(responsible)
       order.responsible = responsible;
 
     order.closed = false;
+    order.status = 'OPENED';
 
     const quotation = new Quotation();
     quotation.order = order;
@@ -105,6 +109,8 @@ class QuotationController {
           totalProposals= (totalProposals+1);
 
           const proposal = new Proposal();
+          proposal.payment_date = new Date();
+          proposal.delivery_date = new Date();
           proposal.quotation = quotation;
           const providerItem = await entityManager.findOne(Provider, topProvider.provider.id);
 

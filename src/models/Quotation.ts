@@ -4,7 +4,8 @@ import {
   CreateDateColumn,
   ManyToOne,
   UpdateDateColumn, 
-  OneToMany
+  OneToMany,
+  JoinColumn
 } from "typeorm";
 import Order from './Order';
 import Proposal from "./Proposal";
@@ -15,13 +16,14 @@ class Quotation {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @CreateDateColumn({ type: 'timestamptz', select: false })
+  @CreateDateColumn({ type: 'timestamptz', select: false, name: 'created_at'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', select: false })
+  @UpdateDateColumn({ type: 'timestamptz', select: false,  name: 'updated_at' })
   updatedAt: Date;
 
   @ManyToOne(type => Order, order => order.quoatations)
+  @JoinColumn({name: 'order_id'})
   order: Order;
 
   @OneToMany(type => Proposal, proposal => proposal.quotation)

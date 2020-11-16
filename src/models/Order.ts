@@ -4,7 +4,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne, OneToMany
+  ManyToOne, OneToMany, JoinColumn
 } from "typeorm";
 import OrderHistory from "./OrderHistory";
 import Quotation from "./Quotation";
@@ -22,13 +22,17 @@ class Order {
   @Column({default: false})
   closed: boolean;
 
-  @CreateDateColumn({ type: 'timestamptz', select: false })
+  @Column()
+  status: string;
+
+  @CreateDateColumn({ type: 'timestamptz', select: false, name: 'created_at'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', select: false })
+  @UpdateDateColumn({ type: 'timestamptz', select: false,  name: 'updated_at' })
   updatedAt: Date;
 
   @ManyToOne(type => Responsible, responsible => responsible.orders)
+  @JoinColumn({name: 'responsible_id'})
   responsible: Responsible;
 
   @OneToMany(type => Quotation, quotation => quotation.order)

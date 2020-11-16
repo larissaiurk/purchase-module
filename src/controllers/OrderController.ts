@@ -22,6 +22,7 @@ class OrderController {
       .createQueryBuilder()
       .update(Order)
       .set({ closed: true })
+      .set({ status: 'CLOSED' })
       .where("id = :id", { id: idOrder })
       .execute();
 
