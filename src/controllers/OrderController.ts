@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
-import { getRepository, createQueryBuilder, getConnection } from 'typeorm';
+import { getRepository, createQueryBuilder, getConnection, getManager } from 'typeorm';
+import Bill from '../models/Bill';
+import BillToPay from '../models/BillToPay';
 
 import Order from '../models/Order';
 import Proposal from '../models/Proposal';
+import Provider from '../models/Provider';
 
 class OrderController {
 
@@ -31,7 +34,30 @@ class OrderController {
       .update(Proposal)
       .set({ choosed: true })
       .where("id = :id", { id: idChoosedProposal })
-      .execute();      
+      .execute();  
+      
+      console.log('oi')
+      const entityManager = getManager();
+      const bill = new Bill();
+      bill.documentId = 1
+      bill.dueDate = new Date()
+      bill.internNumber = 10
+      bill.situation = 'open'
+      bill.ourNumber = 1
+  
+      const billToPay = new BillToPay();
+
+      const provider = await entityManager.findOne(Provider, 1);
+    
+      if(provider)
+        billToPay.beneficiary = provider
+
+      billToPay.bill = bill;
+      
+      
+      await entityManager.save(bill);
+      await entityManager.save(billToPay);
+      
 
     return response.status(200).json(`Ordem atualizada com sucesso`);
   }

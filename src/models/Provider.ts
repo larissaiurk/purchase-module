@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn, OneToMany, JoinColumn
 } from "typeorm";
+import BillToPay from "./BillToPay";
 
 import Product from "./Product";
 import ProductProvider from './ProductProvider';
@@ -28,8 +29,10 @@ class Provider {
   proposals: Proposal[];
 
   @OneToMany(type => ProductProvider, productProvider => productProvider.provider)
-  
   productProviders: ProductProvider[];
+
+  @OneToMany(type => BillToPay, bill => bill.bill)
+  billsToPay: BillToPay[];
 
 }
 

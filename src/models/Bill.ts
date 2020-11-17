@@ -4,17 +4,21 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+
+import BillToPay from './BillToPay'
+import BillToReceive from './BillToReceive'
 
 @Entity("bill")
 class Bill {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
+  @Column({name: 'intern_number'})
   internNumber: number;
 
-  @Column()
+  @Column({name: 'our_number'})
   ourNumber: number;
 
   @CreateDateColumn({ type: 'timestamptz', select: false, name: 'created_at'})
@@ -26,17 +30,23 @@ class Bill {
   @CreateDateColumn({ type: 'timestamptz', name: 'due_date' })
   dueDate: Date;
 
-  @Column()
+  @Column({name: 'original_value'})
   originalValue: number;
 
-  @Column()
+  @Column({name: 'open_value'})
   openValue: number;
 
   @Column()
   situation: string;
 
-  @Column()
+  @Column({name: 'document_id'})
   documentId: number;
+
+  @OneToMany(type => BillToReceive, bill => bill.bill)
+  billsToReceive: BillToReceive[];
+
+  @OneToMany(type => BillToPay, bill => bill.bill)
+  billsToPay: BillToPay[];
 
 }
 
