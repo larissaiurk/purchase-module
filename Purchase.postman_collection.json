@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "aa3d72d2-ee07-42d5-98dd-2ff0fd10c355",
+		"_postman_id": "73f0fda6-5695-40fd-a827-3dd807645930",
 		"name": "Purchase",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,7 +14,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:3333/proposal",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"proposal"
+							]
 						}
 					},
 					"response": []
@@ -95,7 +103,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:3333/quotation/15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"quotation",
+								"15"
+							]
 						}
 					},
 					"response": []
@@ -120,10 +137,25 @@
 				{
 					"name": "Atualizar status ordem",
 					"request": {
-						"method": "GET",
+						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:3333/order/:idOrder",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3333",
+							"path": [
+								"order",
+								":idOrder"
+							],
+							"variable": [
+								{
+									"key": "idOrder",
+									"value": ""
+								}
+							]
 						}
 					},
 					"response": []
